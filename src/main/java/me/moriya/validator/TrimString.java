@@ -13,7 +13,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({FIELD})
 @Retention(RUNTIME)
 public @interface TrimString {
-    String message() default "Field cannot contains white spaces in the beginning or in the end.";
+    String message() default "";
 
     Class<?>[] groups() default {};
 
