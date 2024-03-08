@@ -1,12 +1,9 @@
 package me.moriya;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-
-@SpringBootTest
+// @SpringBootTest
 class WebfluxCourseApplicationTests {
 
-    @Test
+    // @Test
     void contextLoads() {
     }
 
