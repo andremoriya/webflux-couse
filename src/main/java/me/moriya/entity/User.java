@@ -1,6 +1,5 @@
 package me.moriya.entity;
 
-import jakarta.validation.constraints.Email;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -17,7 +16,6 @@ public class User {
 
     private String name;
 
-    @Email
     @Indexed(unique = true)
     private String email;
 

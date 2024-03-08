@@ -1,5 +1,6 @@
 package me.moriya.controller;
 
+import jakarta.validation.Valid;
 import me.moriya.model.request.UserRequest;
 import me.moriya.model.response.UserResponse;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +11,7 @@ import reactor.core.publisher.Mono;
 public interface UserController {
 
     @PostMapping
-    ResponseEntity<Mono<Void>> save(@RequestBody UserRequest userRequest);
+    ResponseEntity<Mono<Void>> save(@Valid @RequestBody UserRequest userRequest);
 
     @GetMapping("/{id}")
     ResponseEntity<Mono<UserResponse>> find(@PathVariable String id);
