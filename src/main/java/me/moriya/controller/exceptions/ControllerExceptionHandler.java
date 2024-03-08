@@ -27,7 +27,8 @@ public class ControllerExceptionHandler {
                                         .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
                                         .message(verifyDuplicateKey(e.getMessage()))
                                         .path(request.getPath().toString())
-                        .build())
+                                        .build()
+                        )
                 );
     }
 
@@ -43,9 +44,7 @@ public class ControllerExceptionHandler {
                 "Error on validation attributes"
         );
 
-        e.getBindingResult().getFieldErrors().forEach(
-                fieldError -> error.addError(fieldError.getField(), fieldError.getDefaultMessage())
-        );
+        error.addErrors(e.getBindingResult().getFieldErrors());
 
         return ResponseEntity.badRequest()
                 .body(Mono.just(error));
