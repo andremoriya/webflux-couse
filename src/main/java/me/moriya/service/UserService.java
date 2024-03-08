@@ -7,6 +7,7 @@ import me.moriya.model.response.UserResponse;
 import me.moriya.repository.UserRepository;
 import me.moriya.service.exception.NotFoundException;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -30,6 +31,11 @@ public class UserService {
                 .switchIfEmpty(
                         Mono.error(new NotFoundException("User with ID %s not found.".formatted(id)))
                 );
+    }
+
+    public Flux<UserResponse> findAll() {
+        return userRepository.findAll()
+                .map(userMapper::toResponse);
     }
 
 }
