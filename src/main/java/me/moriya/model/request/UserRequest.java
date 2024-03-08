@@ -3,13 +3,16 @@ package me.moriya.model.request;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import me.moriya.validator.TrimString;
 
 public record UserRequest(
 
+        @TrimString
         @Size(min = 3, max = 50, message = "Must be between 3 and 50 characters")
         @NotBlank(message = "must not be empty or null")
         String name,
 
+        @TrimString
         @Email(message = "Invalid email address")
         @NotBlank(message = "Must not be empty or null")
         String email,
