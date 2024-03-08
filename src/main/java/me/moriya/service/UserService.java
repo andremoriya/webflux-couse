@@ -1,9 +1,9 @@
 package me.moriya.service;
 
 import lombok.RequiredArgsConstructor;
-import me.moriya.entity.User;
 import me.moriya.mapper.UserMapper;
 import me.moriya.model.request.UserRequest;
+import me.moriya.model.response.UserResponse;
 import me.moriya.repository.UserRepository;
 import me.moriya.service.exception.NotFoundException;
 import org.springframework.stereotype.Service;
@@ -17,12 +17,16 @@ public class UserService {
 
     private final UserMapper userMapper;
 
-    public Mono<User> save(final UserRequest userRequest) {
-        return userRepository.save(userMapper.toEntity(userRequest));
+    public Mono<Void> save(final UserRequest userRequest) {
+        return userRepository
+                .save(
+                        userMapper.toEntity(userRequest)
+                ).then(); // Added .then() to return a Mono<Void>, because the method save() returns a Mono<User>
     }
 
-    public Mono<User> findById(final String id) {
+    public Mono<UserResponse> findById(final String id) {
         return userRepository.findById(id)
+                .map(userMapper::toResponse)
                 .switchIfEmpty(
                         Mono.error(new NotFoundException("User with ID %s not found.".formatted(id)))
                 );
