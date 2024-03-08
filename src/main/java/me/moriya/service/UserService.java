@@ -5,6 +5,7 @@ import me.moriya.entity.User;
 import me.moriya.mapper.UserMapper;
 import me.moriya.model.request.UserRequest;
 import me.moriya.repository.UserRepository;
+import me.moriya.service.exception.NotFoundException;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -21,7 +22,10 @@ public class UserService {
     }
 
     public Mono<User> findById(final String id) {
-        return userRepository.findById(id);
+        return userRepository.findById(id)
+                .switchIfEmpty(
+                        Mono.error(new NotFoundException("User with ID %s not found.".formatted(id)))
+                );
     }
 
 }

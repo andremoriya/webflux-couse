@@ -1,4 +1,4 @@
-package me.moriya.controller.exceptions;
+package me.moriya.controller.exception;
 
 import lombok.Getter;
 import org.springframework.validation.FieldError;

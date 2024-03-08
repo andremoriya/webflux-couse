@@ -1,7 +1,7 @@
-package me.moriya.controller.exceptions;
+package me.moriya.controller.exception;
 
+import me.moriya.service.exception.NotFoundException;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -10,6 +10,9 @@ import org.springframework.web.bind.support.WebExchangeBindException;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
@@ -23,8 +26,8 @@ public class ControllerExceptionHandler {
                                         .builder()
                                         .requestId(request.getId())
                                         .timestamp(LocalDateTime.now())
-                                        .status(HttpStatus.BAD_REQUEST.value())
-                                        .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                                        .status(BAD_REQUEST.value())
+                                        .error(BAD_REQUEST.getReasonPhrase())
                                         .message(verifyDuplicateKey(e.getMessage()))
                                         .path(request.getPath().toString())
                                         .build()
@@ -39,7 +42,7 @@ public class ControllerExceptionHandler {
                 request.getId(),
                 LocalDateTime.now(),
                 request.getPath().toString(),
-                HttpStatus.BAD_REQUEST.value(),
+                BAD_REQUEST.value(),
                 "Validation Error",
                 "Error on validation attributes"
         );
@@ -49,6 +52,25 @@ public class ControllerExceptionHandler {
         return ResponseEntity.badRequest()
                 .body(Mono.just(error));
     }
+
+    @ExceptionHandler(NotFoundException.class)
+    ResponseEntity<Mono<StandardError>> notFoundException(NotFoundException e, ServerHttpRequest request) {
+        return ResponseEntity.status(NOT_FOUND)
+                .body(
+                        Mono.just(
+                                StandardError
+                                        .builder()
+                                        .requestId(request.getId())
+                                        .timestamp(LocalDateTime.now())
+                                        .status(NOT_FOUND.value())
+                                        .error(NOT_FOUND.getReasonPhrase())
+                                        .message(e.getMessage())
+                                        .path(request.getPath().toString())
+                                        .build()
+                        )
+                );
+    }
+
 
     private String verifyDuplicateKey(String message) {
         if (message.contains("email dup key")) {
