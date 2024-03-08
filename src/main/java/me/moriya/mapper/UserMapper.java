@@ -2,6 +2,7 @@ package me.moriya.mapper;
 
 import me.moriya.entity.User;
 import me.moriya.model.request.UserRequest;
+import me.moriya.model.response.UserResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -21,4 +22,7 @@ public interface UserMapper {
     * */
     @Mapping(target = "id", ignore = true) //
     User toEntity(final UserRequest userRequest);
+
+    UserResponse toResponse(final User user);
+
 }

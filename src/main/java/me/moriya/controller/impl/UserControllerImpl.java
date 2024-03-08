@@ -2,6 +2,7 @@ package me.moriya.controller.impl;
 
 import lombok.RequiredArgsConstructor;
 import me.moriya.controller.UserController;
+import me.moriya.mapper.UserMapper;
 import me.moriya.model.request.UserRequest;
 import me.moriya.model.response.UserResponse;
 import me.moriya.service.UserService;
@@ -18,6 +19,7 @@ import reactor.core.publisher.Mono;
 public class UserControllerImpl implements UserController {
 
     private final UserService userService;
+    private final UserMapper userMapper;
 
     @Override
     public ResponseEntity<Mono<Void>> save(UserRequest userRequest) {
@@ -25,12 +27,15 @@ public class UserControllerImpl implements UserController {
                 .status(HttpStatus.CREATED)
                 // Added .then() to return a Mono<Void>, because the method save() returns a Mono<User>
                 .body(userService.save(userRequest).then());
-
     }
 
     @Override
-    public ResponseEntity<Mono<UserResponse>> find(String id) {
-        return null;
+    public ResponseEntity<Mono<UserResponse>> findById(String id) {
+        return ResponseEntity.ok(
+                userService
+                        .findById(id)
+                        .map(userMapper::toResponse)
+        );
     }
 
     @Override
