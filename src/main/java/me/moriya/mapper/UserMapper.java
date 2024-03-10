@@ -5,6 +5,7 @@ import me.moriya.model.request.UserRequest;
 import me.moriya.model.response.UserResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import static org.mapstruct.NullValueCheckStrategy.ALWAYS;
 import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
@@ -23,6 +24,13 @@ public interface UserMapper {
     @Mapping(target = "id", ignore = true) //
     User toEntity(final UserRequest userRequest);
 
-    UserResponse toResponse(final User user);
+    @Mapping(target = "id", ignore = true)
+    User toEntity(final UserRequest userRequest,
+                  @MappingTarget final User user);
+
+    UserResponse toReponse(final User user);
+
+    User toEntity(final UserResponse userResponse);
+
 
 }

@@ -27,7 +27,7 @@ public class UserService {
 
     public Mono<UserResponse> findById(final String id) {
         return userRepository.findById(id)
-                .map(userMapper::toResponse)
+                .map(userMapper::toReponse)
                 .switchIfEmpty(
                         Mono.error(new NotFoundException("User with ID %s not found.".formatted(id)))
                 );
@@ -35,7 +35,15 @@ public class UserService {
 
     public Flux<UserResponse> findAll() {
         return userRepository.findAll()
-                .map(userMapper::toResponse);
+                .map(userMapper::toReponse);
+    }
+
+    public Mono<UserResponse> update(final String id, final UserRequest userRequest) {
+        return findById(id)
+                .map(userMapper::toEntity)
+                .map(user -> userMapper.toEntity(userRequest, user))
+                .flatMap(userRepository::save)
+                .map(userMapper::toReponse);
     }
 
 }
