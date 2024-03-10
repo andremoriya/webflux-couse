@@ -3,6 +3,8 @@ package me.moriya.repository;
 import lombok.RequiredArgsConstructor;
 import me.moriya.entity.User;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -23,5 +25,14 @@ public class UserRepository {
 
     public Flux<User> findAll() {
         return mongoTemplate.findAll(User.class);
+    }
+
+    public Mono<User> findAndRemove(String id) {
+        Query query = new Query()
+                .addCriteria(Criteria.where("id").is(id));
+        return mongoTemplate.findAndRemove(
+                query,
+                User.class
+        );
     }
 }
