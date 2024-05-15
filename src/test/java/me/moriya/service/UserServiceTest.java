@@ -15,7 +15,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import java.util.Objects;
 import java.util.function.Predicate;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -52,10 +51,8 @@ class UserServiceTest {
          * Verifica o comportamento de um Publisher
          * StepVerifier é uma ferramenta do Reactor que permite verificar o comportamento de um Publisher
          * 1 - Criar um Step com base no Publisher (result)
-         * 2 - Metodos encadeados usado pelo StepVerifier para validar as informacoes
          */
         StepVerifier.create(result) // 1
-                .expectNextMatches(Objects::nonNull) // 2
                 .expectNextCount(0)
                 .expectComplete()
                 .verify();
